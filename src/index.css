@@ -1,0 +1,23 @@
+@import "tailwindcss";
+  
+@theme {
+    --color-background-primary: #e8ecf8; /* Light soft blue-gray */
+    --color-background-secondary: #ffffff; /* White for contrast */
+    --color-background-fill: #dbe3ff; /* Softer blue fill */
+    --color-background-card: #f0f4ff; /* Subtle blue-gray for cards */
+    --color-background-chat-left: #f7f9fc; /* Light background for received messages */
+    --color-background-chat-right: #1f41bb; /* Dark blue for sent messages */
+    --color-button: #1f41bb; /* Primary button color */
+    --color-button-hover: #182f88; /* Slightly darker hover */
+    --color-button-muted: #8fa3d8; /* Muted button */
+    --color-button-text: #ffffff; /* Button text */
+    --color-border: #c3c9d9; /* Soft border color */
+    --color-text-primary: #1a1d2e; /* Dark blue-gray for primary text */
+    --color-text-secondary: #4b5563; /* Softer gray for secondary text */
+    --color-text-muted: #94a3b8; /* Muted text */
+    --color-accent: #ff6b6b; /* Warm coral red for accents */
+    --color-accent-hover: #e05555; /* Slightly darker red */
+    --color-success: #22c55e; /* Green for success messages */
+    --color-warning: #facc15; /* Yellow for warnings */
+    --color-error: #ef4444; /* Red for errors */
+}
