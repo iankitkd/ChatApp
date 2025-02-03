@@ -17,24 +17,24 @@ const SideMenu = ({currentSection, setCurrentSection}) => {
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   return (
-    <div className='w-120px h-screen hidden md:flex flex-col justify-between px-2 py-3 border-r-1 border-border'>
+    <div className='w-120px h-screen hidden md:flex flex-col justify-between border-r-1 border-border'>
       <div className='flex flex-col items-center gap-3 text-xl'>
-        <div className='group relative flex items-center'>
+        <div className={`group relative flex items-center px-2 py-2 z-10 ${currentSection == "CHATS"? "bg-background-card": ""}`}>
             <button className='hover:cursor-pointer' onClick={() => setCurrentSection("CHATS")}> <IoMdChatbubbles /> </button>
             <p className='hidden group-hover:block absolute left-full z-10 py-1 px-3 text-sm bg-background-fill rounded-full'>Chats</p>
         </div>
       </div>
 
-      <div className='flex flex-col items-center gap-3 text-xl'>
-        <div className='group relative flex items-center'>
+      <div className='flex flex-col items-center text-xl'>
+        <div className={`group relative flex items-center px-2 py-2 z-10 ${currentSection == "SETTINGS"? "bg-background-card": ""}`}>
             <button className='hover:cursor-pointer' onClick={() => setCurrentSection("SETTINGS")}> <IoMdSettings /> </button>
             <p className='hidden group-hover:block absolute left-full z-10 py-1 px-3 text-sm bg-background-fill rounded-full'>Settings</p>
         </div>
-        <div className='group relative flex items-center'>
+        <div className={`group relative flex items-center px-2 py-2 z-10 ${currentSection == "PROFILE"? "bg-background-card": ""}`}>
             <button className='hover:cursor-pointer' onClick={() => setCurrentSection("PROFILE")}> <FaUserCircle /> </button>
             <p className='hidden group-hover:block absolute left-full z-10 py-1 px-3 text-sm bg-background-fill rounded-full'>Profile</p>
         </div>
-        <div className='group relative flex items-center'>
+        <div className={`group relative flex items-center px-2 py-1`}>
             <button className='hover:cursor-pointer' onClick={() => {setIsLogoutModalOpen(true)}}> <MdLogout /> </button>
             <p className='hidden group-hover:block absolute left-full z-10 py-1 px-3 text-sm bg-background-fill rounded-full'>Logout</p>
         </div>

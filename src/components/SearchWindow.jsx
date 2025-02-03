@@ -5,19 +5,20 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { findUsersByUsername } from '../services/userService';
 import debounce from '../utils/debounce';
 import UserTile from './UserTile';
+import { useSelector } from 'react-redux';
 
 const SearchWindow = ({closeWindow}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResult, setSearchResult] = useState([]);
 
+  const {user} = useSelector(state => state.auth);
 
   const findUser = async (value) => {
     try {
       if(value) {
         const response = await findUsersByUsername(value);
-        console.log(response)
         if(response?.length > 0) {
-          setSearchResult(response);
+          setSearchResult(response.filter(result => result.uid !== user.uid));
         }
       } else {
         setSearchResult([]);
@@ -54,12 +55,16 @@ const SearchWindow = ({closeWindow}) => {
         />
       </div>
 
-      <div className='flex flex-col'>
-        {
-          searchResult?.length > 0 && searchResult.map((userData) => (
+      <div className='flex flex-col'> 
+        {searchResult?.length > 0 ? (
+            searchResult.map((userData) => (
             <UserTile key={userData.uid} userData={userData} />
           ))
-        }
+        ) : (
+          <div className='text-center py-2'>
+            No User found
+          </div>
+        )}
       </div>
     </div>
   )

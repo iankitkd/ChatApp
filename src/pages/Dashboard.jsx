@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Chatlist, SearchWindow, SideMenu } from '../components/'
+import { useSelector } from 'react-redux';
+import { Chatlist, ChatWindow, SearchWindow, SideMenu } from '../components/'
 
 import { FaSearch } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -8,6 +9,8 @@ const Dashboard = () => {
   const [currentSection, setCurrentSection] = useState("CHATS");
 
   const [isSearchWindowOpen, setIsSearchWindowOpen] = useState(false);
+
+  const {selectedUser} = useSelector(state => state.chat);
 
   return (
     <div className='w-full h-screen flex flex-row'>
@@ -29,7 +32,7 @@ const Dashboard = () => {
         }
       </div>
 
-      {/* <div><ChatWindow /></div> */}
+      {selectedUser && <ChatWindow />}
     </div>
   )
 }

@@ -21,3 +21,18 @@
     --color-warning: #facc15; /* Yellow for warnings */
     --color-error: #ef4444; /* Red for errors */
 }
+
+::-webkit-scrollbar {
+    width:6px;
+    height:6px;
+} 
+
+::-webkit-scrollbar-track {
+    background: #e8ecf8;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #dbe3ff;
+    border-radius: 5px;
+}

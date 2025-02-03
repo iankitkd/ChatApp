@@ -68,9 +68,10 @@ export const findUsersByUsername = async (username) => {
             return [];
         }
 
-        const users = querySnapshot.docs.map(doc => ({
-            ...doc.data()
-        }));
+        const users = querySnapshot.docs.map(doc => {
+            const {createdAt, ...userData} = doc.data();
+            return userData;
+        });
 
         return users;
     } catch (error) {

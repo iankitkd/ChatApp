@@ -5,6 +5,7 @@ import SideMenu from "./SideMenu";
 import Chatlist from './Chatlist';
 import SearchWindow from './SearchWindow';
 import UserTile from './UserTile';
+import ChatWindow from './ChatWindow';
 
 export {
     OpenRoute, 
@@ -14,4 +15,5 @@ export {
     Chatlist,
     SearchWindow,
     UserTile,
+    ChatWindow,
 }
