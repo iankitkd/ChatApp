@@ -9,18 +9,17 @@ import {auth} from '../config/firebase'
 import toast from 'react-hot-toast';
 import { getAuthErrorMessage } from "../utils/authErrors";
 import { setLoading, setUser } from "../slices/authSlice";
+import { createUser } from "./userService";
 
 
-export const signUpService = (email, password, name, navigate) => async (dispatch) => {
+export const signUpService = (email, password, username, navigate) => async (dispatch) => {
   const toastId = toast.loading('Signing up...');
   dispatch(setLoading(true));
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const {uid, email:userEmail, displayName, photoURL} = userCredential.user;
-    dispatch(setUser({uid, userEmail, displayName, photoURL}));
-    // await user.updateProfile({
-    //   displayName: name
-    // })
+    const {uid, displayName, photoURL} = userCredential.user;
+    await createUser(uid, email, displayName, username, photoURL);
+    dispatch(setUser({uid, email, displayName, username, photoURL}));
     toast.dismiss(toastId);
     toast.success("Account created successfully!");
     navigate("/dashboard");

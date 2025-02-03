@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaRegCheckCircle, FaRegTimesCircle } from "react-icons/fa";
 import { IoMdLock, IoMdMail, IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 import { signUpService } from '../services/authService';
-import { useDispatch, useSelector } from 'react-redux';
+import { checkUsernameAvailable } from '../services/userService';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -15,22 +16,45 @@ const Signup = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
 
+  const [isValidUsername, setIsValidUsername] = useState(false);
+
   const {loading}  = useSelector(state => state.auth);
 
   const {
     register,
     handleSubmit,
     watch,
-    formState: {errors}
+    setError,
+    setValue,
+    formState: {errors},
+    clearErrors
   } = useForm({defaultValues: {
-    name: "",
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
   }});
 
-  const {name, email, password, confirmPassword} = watch();
+  const {username, email, password, confirmPassword} = watch();
 
+
+  const validateUsername = async (value) => {
+    if (value.length < 6) {
+      return "Username must be at least 6 characters";
+    }
+
+    const usernameRegex = /^[a-zA-Z0-9._]+$/;
+    if (!usernameRegex.test(value)) {
+      return "Username can only contain letters, numbers, dot(.), underscore(_)";
+    }
+
+    const isUsernameAvailable = await checkUsernameAvailable(value);
+    if (!isUsernameAvailable) {
+      return "Username not available. Please choose another";
+    } 
+
+    return true;
+  };
   const validateConfirmPassword = (value) => {
     if (value !== password) {
       return "Passwords do not match";
@@ -38,10 +62,25 @@ const Signup = () => {
     return true;
   };
 
-  const handleSignUp = (formData) => {
-    const {name, email, password} = formData;
-    dispatch(signUpService(email, password, name, navigate));
+  const handleUsernameChange = async (e) => {
+    const value = e.target.value;
+    setValue("username", value);
+    
+    const validationMessage = await validateUsername(value);
+    if(validationMessage !== true) {
+      setIsValidUsername(false);
+      setError("username", {
+        type: "manual",
+        message: validationMessage
+      });
+    } else {
+      setIsValidUsername(true);
+      clearErrors("username");
+    }
+  }
 
+  const handleSignUp = () => {
+    dispatch(signUpService(email, password, username, navigate));
   }
 
   return (
@@ -54,21 +93,31 @@ const Signup = () => {
           {/* form */}
           <form onSubmit={handleSubmit(handleSignUp)}>
             
-            <label htmlFor='name' className='relative flex flex-col'>
+            <label htmlFor='username' className='relative flex flex-col'>
               <FaUser className='absolute top-[30px] left-1 text-xl'/>
+              <div className='absolute top-[30px] right-1'>
+                { username ? (
+                  isValidUsername
+                  ? <FaRegCheckCircle className=' text-xl text-success' />
+                  : <FaRegTimesCircle className='text-xl text-error'/>
+                ) : (
+                  null
+                )}
+              </div>
               <input 
               type="text" 
-              id='name'
-              value={name}
-              placeholder='Full Name'
+              id='username'
+              value={username}
+              placeholder='Username'
               autoComplete='on'
-              className='bg-background-fill h-12 mt-4 pl-7 rounded-xl placeholder-text-muted outline-0 focus:outline-1 focus:outline-button'
-              {...register("name", {
-                required: "Name is required", 
-                
+              className='bg-background-fill h-12 mt-4 pl-7 pr-7 rounded-xl placeholder-text-muted outline-0 focus:outline-1 focus:outline-button'
+              {...register("username", {
+                required: "Username is required",
+                validate: validateUsername,
               })}
+              onChange={handleUsernameChange}
               />
-              {errors.name && (<span className='text-red-500 text-xs px-2'>{errors.name.message}</span>)}
+              {errors.username && (<span className='text-red-500 text-xs px-2'>{errors.username.message}</span>)}
             </label>
 
             <label htmlFor='email' className='relative flex flex-col'>
