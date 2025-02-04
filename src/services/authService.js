@@ -12,14 +12,14 @@ import { setLoading, setUser } from "../slices/authSlice";
 import { createUser } from "./userService";
 
 
-export const signUpService = (email, password, username, navigate) => async (dispatch) => {
+export const signUpService = (email, password, name, username, navigate) => async (dispatch) => {
   const toastId = toast.loading('Signing up...');
   dispatch(setLoading(true));
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const {uid, displayName, photoURL} = userCredential.user;
-    await createUser(uid, email, displayName, username, photoURL);
-    dispatch(setUser({uid, email, displayName, username, photoURL}));
+    const {uid, photoURL} = userCredential.user;
+    await createUser(uid, email, name, username, photoURL);
+    dispatch(setUser({uid, email, name, username, photoURL}));
     toast.dismiss(toastId);
     toast.success("Account created successfully!");
     navigate("/dashboard");

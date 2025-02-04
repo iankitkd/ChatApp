@@ -29,13 +29,14 @@ const Signup = () => {
     formState: {errors},
     clearErrors
   } = useForm({defaultValues: {
+    name: "",
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
   }});
 
-  const {username, email, password, confirmPassword} = watch();
+  const {name, username, email, password, confirmPassword} = watch();
 
 
   const validateUsername = async (value) => {
@@ -80,7 +81,7 @@ const Signup = () => {
   }
 
   const handleSignUp = () => {
-    dispatch(signUpService(email, password, username, navigate));
+    dispatch(signUpService(email, password, name, username, navigate));
   }
 
   return (
@@ -93,6 +94,26 @@ const Signup = () => {
           {/* form */}
           <form onSubmit={handleSubmit(handleSignUp)}>
             
+            <label htmlFor='name' className='relative flex flex-col'>
+              <FaUser className='absolute top-[30px] left-1 text-xl'/>
+              <input 
+              type="text" 
+              id='name'
+              value={name}
+              placeholder='Full Name'
+              autoComplete='on'
+              className='bg-background-fill h-12 mt-4 pl-7 pr-7 rounded-xl placeholder-text-muted outline-0 focus:outline-1 focus:outline-button'
+              {...register("name", {
+                required: "Full Name is required",
+                minLength: {
+                  value: 3,
+                  message: "Name is too short"
+                }
+              })}
+              />
+              {errors.name && (<span className='text-red-500 text-xs px-2'>{errors.name.message}</span>)}
+            </label>
+
             <label htmlFor='username' className='relative flex flex-col'>
               <FaUser className='absolute top-[30px] left-1 text-xl'/>
               <div className='absolute top-[30px] right-1'>

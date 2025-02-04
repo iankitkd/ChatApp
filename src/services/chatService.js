@@ -1,6 +1,21 @@
 import { db } from "../config/firebase"; 
 import { doc, setDoc, getDoc, addDoc, serverTimestamp, collection, query, orderBy, onSnapshot } from "firebase/firestore";
 
+export const getChatId = async (user1Id, user2Id) => {
+  try {
+    const chatId = user1Id < user2Id ? `${user1Id}_${user2Id}` : `${user2Id}_${user1Id}`;
+    const chatRef = doc(db, "chats", chatId); 
+    const chatSnap = await getDoc(chatRef);
+    if(chatSnap.exists()) {
+      return chatId;
+    }
+    return null;
+  } catch (error) {
+    console.log("Error checking is chat id exist", error);
+    return null;
+  }
+}
+
 export const createNewChat = async (user1Id, user2Id) => {
     try {
         const chatId = user1Id < user2Id ? `${user1Id}_${user2Id}` : `${user2Id}_${user1Id}`;
@@ -20,8 +35,6 @@ export const createNewChat = async (user1Id, user2Id) => {
 export const sendMessage = async (chatId, userId, messageText) => {
     try {
         const messagesRef = collection(db, "chats", chatId, "messages");
-        console.log(messagesRef, "mr")
-        console.log(chatId, userId, messageText, "in sm")
         await addDoc(messagesRef, {
             senderId: userId,
             messageText: messageText,
@@ -39,13 +52,15 @@ export const listenToMessages = (chatId, setChatMessages) => {
     const q = query(messagesRef, orderBy("timestamp", "asc"));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const messages = [];
-      querySnapshot.forEach((doc) => {
-        const {timestamp, ...userData} = doc.data();
-        const formattedTimestamp = timestamp.toDate().toLocaleString();
-        messages.push({formattedTimestamp, ...userData});
+      const messages = querySnapshot.docs.map((doc) => {
+        const {timestamp, ...messageData} = doc.data();
+        const formattedTimestamp = timestamp ? timestamp.toDate().toLocaleString() : "Pending...";
+        return {
+          id: doc.id,
+          formattedTimestamp,
+          ...messageData
+        };
       });
-
       setChatMessages(messages);
     });
 

@@ -4,29 +4,37 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IoMdSend } from "react-icons/io";
 import { FaUser } from 'react-icons/fa';
 
-import { createNewChat, listenToMessages, sendMessage } from '../services/chatService';
-import { setChatMessages } from '../slices/chatSlice';
+import { createNewChat, getChatId, listenToMessages, sendMessage } from '../services/chatService';
 
 const ChatWindow = () => {
-    const [messageInput, setMessageInput] = useState("");
+    const [newMessage, setNewMessage] = useState("");
+    const [messages, setMessages] = useState([]);
     const [chatId, setChatId] = useState(null);
 
-    const dispatch = useDispatch();
     const {user} = useSelector(state => state.auth);
-    const {selectedUser, chatMessages} = useSelector(state => state.chat);
+    const {selectedUser} = useSelector(state => state.chat);
 
-    // const setMessages = (messages) => {
-    //   console.log("ms", messages)
-    //   dispatch(setChatMessages(messages));
-    // }
 
-    // useEffect(() => {
-    //     console.log(selectedUser, "su")
-    //     if (!chatId) return;
+    useEffect(() => {
+      if (!user?.uid || !selectedUser?.uid) return;
+      
+      const fetchChatId = async () => {
+          setMessages([]);
+          setChatId(null);
+          const currentChatId = await getChatId(user.uid, selectedUser.uid);
+          if (currentChatId) {
+            setChatId(currentChatId);
+          }
+      };
+      fetchChatId();
+  }, [user?.uid, selectedUser?.uid]);
 
-    //     const unsubscribe = listenToMessages(chatId, setMessages);
-    //     return () => unsubscribe && unsubscribe();
-    // }, [selectedUser, chatMessages])
+    useEffect(() => {
+        if (!chatId) return;
+
+        const unsubscribe = listenToMessages(chatId, setMessages);
+        return () => unsubscribe && unsubscribe();
+    }, [chatId])
 
     const createChat = async() => {
       try {
@@ -40,13 +48,17 @@ const ChatWindow = () => {
     }
 
     const handleSendMessage = async () => {
+      if(!newMessage) {
+        return;
+      }
       let currentChatId = chatId;
       if(!currentChatId) {
         currentChatId = await createChat();
         if(!currentChatId) return;
       }
-      await sendMessage(currentChatId, user.uid, messageInput);
-      setMessageInput("");
+      // use currentChatId return by createChat not chatId of state
+      await sendMessage(currentChatId, user.uid, newMessage); 
+      setNewMessage("");
     }
 
     const textareaRef = useRef(null);
@@ -83,7 +95,13 @@ const ChatWindow = () => {
         </div>
       </div>
 
-      {/* <div className='flex-grow'></div> */}
+      <div className='overflow-y-auto'>
+        {messages.map((msg) => (
+          <div key={msg.id} className="p-2">
+            {msg.messageText}
+          </div>
+        ))}
+      </div>
 
       {/* message text area */}
       <div className='absolute bottom-0 w-full h-fit flex gap-2 justify-between px-3 py-2 bg-background-card border-border/50 border-l-1'>
@@ -91,14 +109,14 @@ const ChatWindow = () => {
         ref={textareaRef}
         id='message'
         placeholder='Type a message'
-        value={messageInput}
-        onChange={(e) => setMessageInput(e.target.value)}
+        value={newMessage}
+        onChange={(e) => setNewMessage(e.target.value)}
         onInput={adjustHeight}
         rows={1}
         className='w-full min-h-[25px] max-h-[75px] outline-0 resize-none overflow-y-auto'
         />
 
-        <button className='hover:cursor-pointer text-2xl' onClick={handleSendMessage}><IoMdSend /></button>
+        <button className='hover:cursor-pointer hover:scale-110 hover:translate-x-0.5 text-2xl' onClick={handleSendMessage}><IoMdSend /></button>
       </div>
     </div>
   )
