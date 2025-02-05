@@ -16,10 +16,18 @@ const authSlice = createSlice({
         },
         setLoading: (state, action) => {
             state.loading = action.payload;
-        }
-
+        },
+        updateChatHistory: (state, action) => {
+            if (state.user) {
+                state.user = {
+                    ...state.user,
+                    chatHistory: [...new Set([...(state.user.chatHistory || []), action.payload])]
+                };
+                localStorage.setItem("user", JSON.stringify(state.user));
+            }
+        },
     }
 })
 
-export const { setUser, setLoading } = authSlice.actions;
+export const { setUser, setLoading, updateChatHistory } = authSlice.actions;
 export default authSlice.reducer;

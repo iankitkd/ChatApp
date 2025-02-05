@@ -9,8 +9,10 @@ import { createNewChat, getChatId, listenToMessages, sendMessage } from '../serv
 const ChatWindow = () => {
     const [newMessage, setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
+    const [sendMessageLoading, setSendMessageLoading] = useState(false);
     const [chatId, setChatId] = useState(null);
 
+    const dispatch = useDispatch();
     const {user} = useSelector(state => state.auth);
     const {selectedUser} = useSelector(state => state.chat);
 
@@ -36,29 +38,29 @@ const ChatWindow = () => {
         return () => unsubscribe && unsubscribe();
     }, [chatId])
 
-    const createChat = async() => {
-      try {
-        const response = await createNewChat(user.uid, selectedUser.uid);
-        setChatId(response);
-        return response;
-      } catch (error) {
-        console.log("Error at send message", error);
-        return;
+    const messagesEndRef = useRef(null);
+    useEffect(() => {
+      if (messagesEndRef.current) {
+        messagesEndRef.current.scrollIntoView();
       }
-    }
+    }, [messages]);
 
     const handleSendMessage = async () => {
       if(!newMessage) {
         return;
       }
+      setSendMessageLoading(true);
       let currentChatId = chatId;
       if(!currentChatId) {
-        currentChatId = await createChat();
+        currentChatId = await dispatch(createNewChat(user.uid, selectedUser.uid));
         if(!currentChatId) return;
+        setChatId(currentChatId);
       }
       // use currentChatId return by createChat not chatId of state
       await sendMessage(currentChatId, user.uid, newMessage); 
       setNewMessage("");
+      setSendMessageLoading(false);
+      if(textareaRef) textareaRef.current.style.height = "25px";
     }
 
     const textareaRef = useRef(null);
@@ -70,6 +72,7 @@ const ChatWindow = () => {
         }
     };
 
+    let previousDate = null;
 
   return (
     <div className='w-full h-full flex flex-col relative'>
@@ -95,16 +98,37 @@ const ChatWindow = () => {
         </div>
       </div>
 
-      <div className='overflow-y-auto'>
-        {messages.map((msg) => (
-          <div key={msg.id} className="p-2">
-            {msg.messageText}
+      {/* Message display */}
+      <div className='flex-grow overflow-y-auto flex flex-col w-full'>
+        {messages.map((msg) => {
+        
+        const displayDate = msg.date !== previousDate ? msg.date : null;
+        if(displayDate) previousDate = displayDate;
+
+        return (
+        <div key={msg.id} className='w-full flex flex-col'>
+          { displayDate && (
+            <div className='self-center px-3 py-1 bg-background-fill rounded-full'>{displayDate}</div>
+          )}
+
+          <div 
+          key={msg.id} 
+          className={`max-w-full w-fit px-2 py-1 m-2 rounded-xl break-words whitespace-pre-wrap flex flex-col shadow-lg ${msg.senderId == user.uid ? "self-end bg-background-chat-right text-button-text rounded-tr-none" : "bg-background-chat-left rounded-tl-none"}`}
+          >
+            <div className=''>
+              {msg.messageText}
+            </div>
+            <span className='self-end text-[9px] leading-0 pt-2 pb-1'>
+              {msg.time}
+            </span>
           </div>
-        ))}
+        </div>
+        )})}
+        <div ref={messagesEndRef} />
       </div>
 
-      {/* message text area */}
-      <div className='absolute bottom-0 w-full h-fit flex gap-2 justify-between px-3 py-2 bg-background-card border-border/50 border-l-1'>
+      {/* new message text area */}
+      <div className='w-full h-fit flex gap-2 justify-between px-3 py-2 bg-background-card border-border/50 border-l-1'>
         <textarea 
         ref={textareaRef}
         id='message'
@@ -116,7 +140,7 @@ const ChatWindow = () => {
         className='w-full min-h-[25px] max-h-[75px] outline-0 resize-none overflow-y-auto'
         />
 
-        <button className='hover:cursor-pointer hover:scale-110 hover:translate-x-0.5 text-2xl' onClick={handleSendMessage}><IoMdSend /></button>
+        <button className='hover:cursor-pointer hover:scale-110 hover:translate-x-0.5 text-2xl' onClick={handleSendMessage} disabled={sendMessageLoading}><IoMdSend /></button>
       </div>
     </div>
   )

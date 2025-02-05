@@ -16,7 +16,7 @@ const UserTile = ({userData}) => {
   }
 
   return (
-    <div className={`flex items-center w-full p-1 border-b-1 border-border/40 ${selectedUser?.uid === uid ? "bg-background-primary" : ""} hover:cursor-pointer`}
+    <div className={`flex items-center w-full p-1 border-b-1 border-border/40 ${selectedUser?.uid === uid ? "bg-background-primary" : ""} hover:cursor-pointer hover:bg-background-primary`}
       onClick={handleUserSelect}
     >
       <div className='w-10 h-10 rounded-full mr-3 bg-background-primary'>

@@ -79,3 +79,18 @@ export const findUsersByUsername = async (username) => {
         return [];
     }
 };
+
+export const getUsersDetails = async (userList) => {
+    try {
+        const users =  await Promise.all(userList.map(async (userId) => {
+            const userRef = doc(db, "users", userId);
+            const userSnap = await getDoc(userRef);
+            const {createdAt, ...userData} = userSnap.data();
+            return userData;
+        }))
+        return users;
+    } catch (error) {
+        console.log("Error getting user details", error);
+        return [];
+    }
+}

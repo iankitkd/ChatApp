@@ -17,7 +17,7 @@ const SideMenu = ({currentSection, setCurrentSection}) => {
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   return (
-    <div className='w-120px h-screen hidden md:flex flex-col justify-between border-r-1 border-border'>
+    <div className='w-120px h-screen hidden md:flex flex-col justify-between'>
       <div className='flex flex-col items-center gap-3 text-xl'>
         <div className={`group relative flex items-center px-2 py-2 z-10 ${currentSection == "CHATS"? "bg-background-card": ""}`}>
             <button className='hover:cursor-pointer' onClick={() => setCurrentSection("CHATS")}> <IoMdChatbubbles /> </button>
