@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaSearch } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
-import { BottomMenu, Chatlist, ChatWindow, ConfirmationModal, SearchWindow, SideMenu } from '../components/'
+import { BottomMenu, Chatlist, ChatWindow, ConfirmationModal, Profile, SearchWindow, SideMenu } from '../components/'
 import { logoutService } from '../services/authService';
 
 const Dashboard = () => {
@@ -43,6 +43,9 @@ const Dashboard = () => {
         </div>
         {
           currentSection === "CHATS" && (<Chatlist />)
+        }
+        {
+          currentSection === "PROFILE" && (<Profile />)
         }
         {
           isSearchWindowOpen && (<SearchWindow closeWindow={() =>setIsSearchWindowOpen(false)} />)

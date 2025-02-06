@@ -6,7 +6,6 @@ import { getUsersDetails, listenToChatList } from '../services/userService';
 
 const Chatlist = () => {
   const {user} = useSelector(state => state.auth);
-  const chatHistory = user.chatHistory;
 
   const [userChatHistory, setUserChatHistory] = useState([]);
 
@@ -34,8 +33,8 @@ const Chatlist = () => {
           <UserTile key={userData.uid} userData={userData} />
         ))
       ) : (
-        <div className='text-center py-2'>
-          {/* Start new conversion */}
+        <div className='text-center py-2 text-text-muted'>
+          Search user and start new conversion
         </div>
       )}
     </div>
