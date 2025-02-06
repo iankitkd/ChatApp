@@ -1,5 +1,5 @@
 import { db } from "../config/firebase"; 
-import { doc, setDoc, getDoc, serverTimestamp, query, where, getDocs, collection } from "firebase/firestore";
+import { doc, setDoc, getDoc, serverTimestamp, query, where, getDocs, collection, orderBy, onSnapshot } from "firebase/firestore";
 
 export const createUser = async (userId, email, name, username, photoURL) => {
     try {  
@@ -94,3 +94,22 @@ export const getUsersDetails = async (userList) => {
         return [];
     }
 }
+
+export const listenToChatList = (userId, updateChatList) => {
+    try {
+        const chatListRef = collection(db, "users", userId, "chatList");
+        const q = query(chatListRef, orderBy("lastUpdated", "desc"));
+        
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const updatedChatList = querySnapshot.docs.map((doc) => ({
+              chatId: doc.id,
+              ...doc.data(),
+            }));
+            updateChatList(updatedChatList);
+        });
+        return unsubscribe;
+    } catch (error) {
+        console.log("Error listening to chat list updates", error);
+        return null;
+    }
+};

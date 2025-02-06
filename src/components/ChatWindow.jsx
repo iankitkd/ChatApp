@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { IoMdSend } from "react-icons/io";
 import { FaUser } from 'react-icons/fa';
+import { FaArrowLeftLong } from 'react-icons/fa6';
 
 import { createNewChat, getChatId, listenToMessages, sendMessage } from '../services/chatService';
+import { setSelectedUser } from '../slices/chatSlice';
 
 const ChatWindow = () => {
     const [newMessage, setNewMessage] = useState("");
@@ -75,10 +77,15 @@ const ChatWindow = () => {
     let previousDate = null;
 
   return (
-    <div className='w-full h-full flex flex-col relative'>
+    <div className='w-screen lg:w-full h-full flex flex-col relative'>
 
       {/* User Detail */}
       <div className='bg-background-card flex items-center p-1 border-border/50 border-l-1'>
+        <button className='hover:cursor-pointer hover:-translate-x-1 transform transition duration-300 px-3 text-xl' 
+        onClick={() => dispatch(setSelectedUser(null))}
+        >
+          <FaArrowLeftLong />
+        </button>
         <div className='w-10 h-10 rounded-full mr-3 bg-background-primary'>
           {
             selectedUser.photoURL ? (

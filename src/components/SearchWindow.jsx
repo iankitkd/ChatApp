@@ -62,7 +62,7 @@ const SearchWindow = ({closeWindow}) => {
           ))
         ) : (
           <div className='text-center py-2'>
-            No User found
+            {searchQuery && "No User found"}
           </div>
         )}
       </div>

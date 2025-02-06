@@ -1,7 +1,5 @@
 import { db } from "../config/firebase"; 
-import { doc, setDoc, getDoc, addDoc, serverTimestamp, collection, query, orderBy, onSnapshot, updateDoc, arrayUnion } from "firebase/firestore";
-
-import { updateChatHistory } from "../slices/authSlice";
+import { doc, setDoc, getDoc, addDoc, serverTimestamp, collection, query, orderBy, onSnapshot } from "firebase/firestore";
 
 export const getChatId = async (user1Id, user2Id) => {
   try {
@@ -27,18 +25,6 @@ export const createNewChat = (user1Id, user2Id) => async (dispatch) => {
             participants: [user1Id, user2Id],
             createdAt: serverTimestamp(),
         });
-
-        const user1Ref = doc(db, 'users', user1Id);
-        const user2Ref = doc(db, 'users', user2Id);
-        await updateDoc(user1Ref, {
-          chatHistory: arrayUnion(user2Id)
-        });
-        await updateDoc(user2Ref, {
-          chatHistory: arrayUnion(user1Id)
-        });
-
-        dispatch(updateChatHistory(user2Id));
-        console.log(user1Ref)
         return chatId;
     } catch (error) {
         console.log("Error creating new chat", error);
@@ -54,6 +40,24 @@ export const sendMessage = async (chatId, userId, messageText) => {
             messageText: messageText,
             timestamp: serverTimestamp()
         });
+
+        // const chatRef = doc(db, "chats", chatId);
+        // await setDoc(chatRef, {
+        //     lastUpdated: serverTimestamp(),
+        // }, { merge: true });
+
+        const receiverId = chatId.split("_").find(user => user !== userId);
+
+        const updateUserChatList = async (user1Id, user2Id) => {
+            const chatListRef = doc(db, "users", user1Id, "chatList", chatId);
+            await setDoc(chatListRef, {
+                otherUserId: user2Id,
+                lastMessage: messageText,
+                lastUpdated: serverTimestamp(),
+            }, { merge: true });
+        };
+        await updateUserChatList(userId, receiverId);
+        await updateUserChatList(receiverId, userId);
     } catch (error) {
         console.log("Error sending message", error);
     }
@@ -70,8 +74,8 @@ export const listenToMessages = (chatId, setChatMessages) => {
         const {timestamp, ...messageData} = doc.data();
         const dateTime = timestamp?.toDate();
 
-        const date = dateTime ? dateTime.toLocaleDateString('en-In', {day: 'numeric', month: 'short', year: 'numeric'}) : "...";   
-        const time = dateTime ? dateTime.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : "...";
+        const date = dateTime ? dateTime.toLocaleDateString('en-In', {day: 'numeric', month: 'short', year: 'numeric'}) : "";   
+        const time = dateTime ? dateTime.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : "";
 
         return {
           id: doc.id,

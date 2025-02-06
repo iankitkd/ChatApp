@@ -2,29 +2,35 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import {UserTile} from './index';
-import { getUsersDetails } from '../services/userService';
+import { getUsersDetails, listenToChatList } from '../services/userService';
 
 const Chatlist = () => {
   const {user} = useSelector(state => state.auth);
   const chatHistory = user.chatHistory;
 
-  const [chatHistoryUsers, setChatHistoryUsers] = useState([]);
+  const [userChatHistory, setUserChatHistory] = useState([]);
+
+  const updateChatList = async (chatHistory) => {
+    if(!chatHistory || chatHistory.length == 0) {
+      return;
+    }
+    const userList = chatHistory.map(chatId => chatId.otherUserId);
+    const response = await getUsersDetails(userList);
+    setUserChatHistory(response);
+  }
 
   useEffect(() => {
-    const fetchUser = async() => {
-      if(chatHistory) {
-        const response = await getUsersDetails(chatHistory);
-        setChatHistoryUsers(response);
-      }
-    }
-    fetchUser();
-  }, [chatHistory])
+    if(!user) return;
+
+    const unsubscribe = listenToChatList(user.uid, updateChatList);
+    return () => unsubscribe && unsubscribe();
+  }, [user.uid])
   
 
   return (
     <div className='w-full h-full flex flex-col'>
-      {chatHistoryUsers?.length > 0 ? (
-          chatHistoryUsers.map((userData) => (
+      {userChatHistory?.length > 0 ? (
+          userChatHistory.map((userData) => (
           <UserTile key={userData.uid} userData={userData} />
         ))
       ) : (
