@@ -1,37 +1,28 @@
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import React from 'react'
 
 import { FaUserCircle } from "react-icons/fa";
 import { IoMdSettings, IoMdChatbubbles } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 
-import {ConfirmationModal} from './index';
-import { logoutService } from '../services/authService';
 
-const SideMenu = ({currentSection, setCurrentSection}) => {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const {loading} = useSelector(state => state.auth)
-    
-    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+const SideMenu = ({currentSection, setCurrentSection, setIsLogoutModalOpen}) => {
 
   return (
     <div className='w-120px h-screen hidden md:flex flex-col justify-between'>
       <div className='flex flex-col items-center gap-3 text-xl'>
         <div className={`group relative flex items-center px-2 py-2 z-10 ${currentSection == "CHATS"? "bg-background-card": ""}`}>
-            <button className='hover:cursor-pointer' onClick={() => setCurrentSection("CHATS")}> <IoMdChatbubbles /> </button>
+            <button className='hover:cursor-pointer' onClick={() => setCurrentSection("CHATS")}> <IoMdChatbubbles className={`${currentSection == "CHATS"? "text-button": ""} `} /> </button>
             <p className='hidden group-hover:block absolute left-full z-10 py-1 px-3 text-sm bg-background-fill rounded-full'>Chats</p>
         </div>
       </div>
 
       <div className='flex flex-col items-center text-xl'>
         <div className={`group relative flex items-center px-2 py-2 z-10 ${currentSection == "SETTINGS"? "bg-background-card": ""}`}>
-            <button className='hover:cursor-pointer' onClick={() => setCurrentSection("SETTINGS")}> <IoMdSettings /> </button>
+            <button className='hover:cursor-pointer' onClick={() => setCurrentSection("SETTINGS")}> <IoMdSettings className={`${currentSection == "SETTINGS"? "text-button": ""} `} /> </button>
             <p className='hidden group-hover:block absolute left-full z-10 py-1 px-3 text-sm bg-background-fill rounded-full'>Settings</p>
         </div>
         <div className={`group relative flex items-center px-2 py-2 z-10 ${currentSection == "PROFILE"? "bg-background-card": ""}`}>
-            <button className='hover:cursor-pointer' onClick={() => setCurrentSection("PROFILE")}> <FaUserCircle /> </button>
+            <button className='hover:cursor-pointer' onClick={() => setCurrentSection("PROFILE")}> <FaUserCircle className={`${currentSection == "PROFILE"? "text-button": ""} `} /> </button>
             <p className='hidden group-hover:block absolute left-full z-10 py-1 px-3 text-sm bg-background-fill rounded-full'>Profile</p>
         </div>
         <div className={`group relative flex items-center px-2 py-1`}>
@@ -40,19 +31,6 @@ const SideMenu = ({currentSection, setCurrentSection}) => {
         </div>
       </div>
 
-      {
-        isLogoutModalOpen && (
-            <ConfirmationModal 
-            text1={"Log out Confirmation"}
-            text2={"Are You sure you want to log out?"}
-            btn1Text={"No"}
-            btn1Handler={() => setIsLogoutModalOpen(false)}
-            btn2Text={"Yes"}
-            btn2Handler={() => dispatch(logoutService(navigate))}
-            disabled={loading}
-            />
-        )
-      }
     </div>
   )
 }

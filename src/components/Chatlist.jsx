@@ -28,7 +28,7 @@ const Chatlist = () => {
   
 
   return (
-    <div className='w-full h-full flex flex-col'>
+    <div className='w-full h-full flex flex-col overflow-y-auto'>
       {userChatHistory?.length > 0 ? (
           userChatHistory.map((userData) => (
           <UserTile key={userData.uid} userData={userData} />

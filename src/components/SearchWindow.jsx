@@ -55,7 +55,7 @@ const SearchWindow = ({closeWindow}) => {
         />
       </div>
 
-      <div className='flex flex-col'> 
+      <div className='flex flex-col overflow-y-auto'>
         {searchResult?.length > 0 ? (
             searchResult.map((userData) => (
             <UserTile key={userData.uid} userData={userData} />

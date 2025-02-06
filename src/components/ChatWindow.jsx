@@ -135,7 +135,7 @@ const ChatWindow = () => {
       </div>
 
       {/* new message text area */}
-      <div className='w-full h-fit flex gap-2 justify-between px-3 py-2 bg-background-card border-border/50 border-l-1'>
+      <div className='w-full h-fit flex gap-2 justify-between px-1 py-2 border-border/50 border-l-1'>
         <textarea 
         ref={textareaRef}
         id='message'
@@ -144,10 +144,10 @@ const ChatWindow = () => {
         onChange={(e) => setNewMessage(e.target.value)}
         onInput={adjustHeight}
         rows={1}
-        className='w-full min-h-[25px] max-h-[75px] outline-0 resize-none overflow-y-auto'
+        className='w-full min-h-[25px] max-h-[75px] outline-0 resize-none overflow-y-auto px-5 py-2 rounded-full bg-background-card'
         />
 
-        <button className='hover:cursor-pointer hover:scale-110 hover:translate-x-0.5 text-2xl' onClick={handleSendMessage} disabled={sendMessageLoading}><IoMdSend /></button>
+        <button className='hover:cursor-pointer hover:scale-110 hover:translate-x-0.5 text-2xl px-2 py-2 rounded-full bg-background-fill' onClick={handleSendMessage} disabled={sendMessageLoading}><IoMdSend className={"text-button"} /></button>
       </div>
     </div>
   )
