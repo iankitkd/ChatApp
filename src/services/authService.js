@@ -9,7 +9,7 @@ import {auth} from '../config/firebase'
 import toast from 'react-hot-toast';
 import { getAuthErrorMessage } from "../utils/authErrors";
 import { setLoading, setUser } from "../slices/authSlice";
-import { createUser } from "./userService";
+import { createUser, getUser } from "./userService";
 
 
 export const signUpService = (email, password, name, username, navigate) => async (dispatch) => {
@@ -36,10 +36,11 @@ export const logInService = (email, password, navigate) => async (dispatch) => {
   dispatch(setLoading(true));
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const {uid} = userCredential.user;
+    const {name, username, photoURL} = await getUser(uid);
+    dispatch(setUser({uid, email, name, username, photoURL}));
     toast.dismiss(toastId);
     toast.success("Sign in successfully!");
-    const {uid, email:userEmail, displayName, photoURL} = userCredential.user;
-    dispatch(setUser({uid, userEmail, displayName, photoURL}));
     navigate("/dashboard");
   } catch (error) {
     const errorMessage = getAuthErrorMessage(error.code);

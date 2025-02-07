@@ -7,6 +7,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 
 import { BottomMenu, Chatlist, ChatWindow, ConfirmationModal, Profile, SearchWindow, SideMenu } from '../components/'
 import { logoutService } from '../services/authService';
+import useSetVh from '../hooks/useSetVh';
 
 const Dashboard = () => {
   const [currentSection, setCurrentSection] = useState("CHATS");
@@ -28,15 +29,19 @@ const Dashboard = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useSetVh();
+
   return (
-    <div className='w-full h-screen flex flex-row'>
+    <div className='w-full flex flex-row'
+    style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
+    >
       <SideMenu currentSection={currentSection} setCurrentSection={setCurrentSection} setIsLogoutModalOpen={setIsLogoutModalOpen} />
       {!selectedUser && <BottomMenu currentSection={currentSection} setCurrentSection={setCurrentSection} />}
 
-      <div className={`${selectedUser && isMobile ? "hidden" : ""} w-screen md:w-1/3 flex flex-col shadow-lg bg-background-card relative`}>
+      <div className={`${selectedUser && isMobile ? "hidden" : ""} w-screen md:w-2/3 lg:w-1/3 flex flex-col shadow-lg bg-background-card relative`}>
         <div className='flex justify-between px-3 py-1 shadow-xs'>
-          <p className='text-xl font-semibold'>{currentSection.charAt(0).toUpperCase() + currentSection.slice(1).toLowerCase()}</p>
-          <div className='flex gap-4 text-lg'>
+          <p className='text-2xl font-semibold'>{currentSection.charAt(0).toUpperCase() + currentSection.slice(1).toLowerCase()}</p>
+          <div className='flex gap-4 text-2xl'>
             {currentSection === "CHATS" && <button className='hover:cursor-pointer' onClick={() =>setIsSearchWindowOpen(true)}><FaSearch/></button>}
             <button className='md:hidden' onClick={() => setIsMoreMenuOpen(prev => !prev)}><BsThreeDotsVertical/></button>
           </div>
@@ -52,7 +57,7 @@ const Dashboard = () => {
         }
         {
           isMoreMenuOpen && (
-            <div className='absolute top-9 right-0 z-20 flex flex-col items-start gap-1 p-2 px-3 w-28 rounded-xl bg-background-primary'>
+            <div className='absolute top-10 right-0 z-20 flex flex-col items-start gap-2 p-2 px-3 w-32 rounded-xl bg-background-primary text-xl'>
               <button className='' onClick={() => {setCurrentSection("SETTINGS"); setIsMoreMenuOpen(false);}}> Settings </button>
               <button className='' onClick={() => {setIsLogoutModalOpen(true); setIsMoreMenuOpen(false);}}> Logout </button>
             </div>

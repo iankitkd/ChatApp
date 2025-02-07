@@ -75,7 +75,7 @@ export const listenToMessages = (chatId, setChatMessages) => {
         const dateTime = timestamp?.toDate();
 
         const date = dateTime ? dateTime.toLocaleDateString('en-In', {day: 'numeric', month: 'short', year: 'numeric'}) : "";   
-        const time = dateTime ? dateTime.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : "";
+        const time = dateTime ? dateTime.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', hour12: true}) : "";
 
         return {
           id: doc.id,

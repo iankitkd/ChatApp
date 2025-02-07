@@ -37,7 +37,7 @@ const SearchWindow = ({closeWindow}) => {
 
   return (
     <div className='absolute inset-0 z-20 w-full h-full bg-background-card/100'>
-      <div className='flex gap-3 px-3 py-1 shadow-xs text-lg'>
+      <div className='flex gap-3 px-3 py-1 shadow-xs text-2xl'>
         <button className='hover:cursor-pointer hover:-translate-x-1 transform transition duration-300' 
         onClick={closeWindow}
         >

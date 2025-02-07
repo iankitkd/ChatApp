@@ -18,6 +18,25 @@ const ChatWindow = () => {
     const {user} = useSelector(state => state.auth);
     const {selectedUser} = useSelector(state => state.chat);
 
+    const closeChatWindow = () => {
+      dispatch(setSelectedUser(null));
+    }
+
+    useEffect(() => {
+      window.history.pushState({ chatOpen: true }, '');
+  
+      const handlePopState = (event) => {
+        if (event.state && event.state.chatOpen) {
+          closeChatWindow();
+        }
+      };
+      window.addEventListener('popstate', handlePopState);
+  
+      return () => {
+        window.removeEventListener('popstate', handlePopState);
+      };
+    }, [closeChatWindow]);
+  
 
     useEffect(() => {
       if (!user?.uid || !selectedUser?.uid) return;
@@ -62,7 +81,7 @@ const ChatWindow = () => {
       await sendMessage(currentChatId, user.uid, newMessage); 
       setNewMessage("");
       setSendMessageLoading(false);
-      if(textareaRef) textareaRef.current.style.height = "25px";
+      if(textareaRef) textareaRef.current.style.height = "40px";
     }
 
     const textareaRef = useRef(null);
@@ -77,16 +96,16 @@ const ChatWindow = () => {
     let previousDate = null;
 
   return (
-    <div className='w-screen lg:w-full h-full flex flex-col relative'>
+    <div className='w-screen lg:w-full flex flex-col relative'>
 
       {/* User Detail */}
       <div className='bg-background-card flex items-center p-1 border-border/50 border-l-1'>
-        <button className='hover:cursor-pointer hover:-translate-x-1 transform transition duration-300 px-3 text-xl' 
-        onClick={() => dispatch(setSelectedUser(null))}
+        <button className='hover:cursor-pointer hover:-translate-x-1 transform transition duration-300 px-3 text-xl h-full' 
+        onClick={closeChatWindow}
         >
           <FaArrowLeftLong />
         </button>
-        <div className='w-10 h-10 rounded-full mr-3 bg-background-primary'>
+        <div className='w-12 h-12 rounded-full mr-4 bg-background-primary'>
           {
             selectedUser.photoURL ? (
               <img
@@ -100,7 +119,7 @@ const ChatWindow = () => {
           }
         </div>
         <div className="flex flex-col">
-          <h3 className="text-lg leading-3 font-semibold">{selectedUser.name}</h3>
+          <h3 className="text-xl leading-5 font-medium">{selectedUser.name}</h3>
           <p className="text-sm text-text-muted">@{selectedUser.username}</p>
         </div>
       </div>

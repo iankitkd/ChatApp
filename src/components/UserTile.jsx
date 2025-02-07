@@ -19,7 +19,7 @@ const UserTile = ({userData}) => {
     <div className={`flex items-center w-full p-1 border-b-1 border-border/40 ${selectedUser?.uid === uid ? "bg-background-primary" : ""} hover:cursor-pointer hover:bg-background-primary`}
       onClick={handleUserSelect}
     >
-      <div className='w-10 h-10 rounded-full mr-3 bg-background-primary'>
+      <div className='w-12 h-12 rounded-full mr-4 bg-background-primary'>
         {
           photoURL ? (
             <img
@@ -33,7 +33,7 @@ const UserTile = ({userData}) => {
         }
       </div>
       <div className="flex flex-col">
-        <h3 className="text-lg leading-3 font-semibold">{name}</h3>
+        <h3 className="text-xl leading-5 font-medium">{name}</h3>
         <p className="text-sm text-text-muted">@{username}</p>
       </div>
     </div>

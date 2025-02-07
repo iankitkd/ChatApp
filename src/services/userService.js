@@ -22,6 +22,20 @@ export const createUser = async (userId, email, name, username, photoURL) => {
     }
 };
 
+export const getUser = async (userId) => {
+    try {
+        const userRef = doc(db, "users", userId);
+        const userSnap = await getDoc(userRef);
+        if(!userSnap.exists()) {
+            return null;
+        }
+        return userSnap.data();
+    } catch (error) {
+        console.log("Error getting user", error);
+        return null;
+    }
+}
+
 export const checkUsernameAvailable = async (username) => {
     try {
         const usernameRef = doc(db, "usernames", username.toLowerCase());
