@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaSearch } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
-import { BottomMenu, Chatlist, ChatWindow, ConfirmationModal, Profile, SearchWindow, SideMenu } from '../components/'
+import { BottomMenu, Chatlist, ChatWindow, ConfirmationModal, Profile, SearchWindow, Settings, SideMenu } from '../components/'
 import { logoutService } from '../services/authService';
 import useSetVh from '../hooks/useSetVh';
 
@@ -51,6 +51,9 @@ const Dashboard = () => {
         }
         {
           currentSection === "PROFILE" && (<Profile />)
+        }
+        {
+          currentSection === "SETTINGS" && (<Settings />)
         }
         {
           isSearchWindowOpen && (<SearchWindow closeWindow={() =>setIsSearchWindowOpen(false)} />)

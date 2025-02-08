@@ -22,6 +22,28 @@
     --color-error: #ef4444; /* Red for errors */
 }
 
+[data-theme="dark"] {
+    --color-background-primary: #1b1f28; /* Dark charcoal background for the main background */
+    --color-background-secondary: #2a303c; /* Slightly lighter dark gray for contrast */
+    --color-background-fill: #333c48; /* Dark gray-blue for fills */
+    --color-background-card: #2a323d; /* Slightly darker card background */
+    --color-background-chat-left: #3b444e; /* Darker gray-blue for received messages */
+    --color-background-chat-right: #3a6ee6; /* Bright blue for sent messages */
+    --color-button: #4c75ff; /* Primary bright blue button */
+    --color-button-hover: #3a64d7; /* Darker blue for hover effect */
+    --color-button-muted: #6c86d0; /* Muted blue for disabled buttons */
+    --color-button-text: #ffffff; /* White text on buttons */
+    --color-border: #2c353d; /* Subtle dark blue-gray for borders */
+    --color-text-primary: #f1f8ff; /* Soft white for primary text */
+    --color-text-secondary: #9ba6b2; /* Light grayish blue for secondary text */
+    --color-text-muted: #7d8a96; /* Muted gray-blue for less important text */
+    --color-accent: #60a7ff; /* Light blue for accent color */
+    --color-accent-hover: #4e92e1; /* Slightly darker blue for hover effect */
+    --color-success: #22c55e; /* Green for success messages */
+    --color-warning: #facc15; /* Yellow for warnings */
+    --color-error: #ef4444; /* Red for errors */
+}
+
 ::-webkit-scrollbar {
     width:6px;
     height:6px;

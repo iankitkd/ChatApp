@@ -8,6 +8,7 @@ import Profile from './Profile';
 import SearchWindow from './SearchWindow';
 import UserTile from './UserTile';
 import ChatWindow from './ChatWindow';
+import Settings from './Settings';
 
 export {
     OpenRoute, 
@@ -20,4 +21,5 @@ export {
     SearchWindow,
     UserTile,
     ChatWindow,
+    Settings,
 }

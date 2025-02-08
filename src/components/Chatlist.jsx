@@ -16,10 +16,16 @@ const Chatlist = () => {
     const userList = chatHistory.map(chatId => chatId.otherUserId);
     const response = await getUsersDetails(userList);
     setUserChatHistory(response);
+    localStorage.setItem("chatList", JSON.stringify(response));
   }
 
   useEffect(() => {
     if(!user) return;
+
+    const cachedChatList = localStorage.getItem("chatList");
+    if (cachedChatList) {
+      setUserChatHistory(JSON.parse(cachedChatList));
+    }
 
     const unsubscribe = listenToChatList(user.uid, updateChatList);
     return () => unsubscribe && unsubscribe();
