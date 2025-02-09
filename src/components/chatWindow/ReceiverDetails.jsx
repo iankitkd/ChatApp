@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaUser } from 'react-icons/fa'
+import { FaRobot, FaUser } from 'react-icons/fa'
 import { FaArrowLeftLong } from 'react-icons/fa6'
 
 const ReceiverDetails = ({selectedUser, closeChatWindow}) => {
@@ -20,6 +20,8 @@ const ReceiverDetails = ({selectedUser, closeChatWindow}) => {
               src={selectedUser.photoURL}
               alt="User Image"
               />
+            ) : selectedUser.uid === "ai" ? (
+              <FaRobot className='w-full h-full p-2' />
             ) : (
               <FaUser className='w-full h-full p-2' />
             )

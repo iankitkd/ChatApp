@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     selectedUser: null,
-    selectedSection: "CHATS",
+    selectedSection: localStorage.getItem("selectedSection") ? JSON.parse(localStorage.getItem("selectedSection")) : "CHATS",
 }
 
 const selectionSlice = createSlice({
@@ -14,6 +14,7 @@ const selectionSlice = createSlice({
         },
         setSelectedSection: (state, action) => {
             state.selectedSection = action.payload;
+            localStorage.setItem("selectedSection", JSON.stringify(action.payload))
         },
     }
 })

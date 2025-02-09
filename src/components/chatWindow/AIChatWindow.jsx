@@ -72,6 +72,21 @@ const AIChatWindow = () => {
       dispatch(setSelectedSection("CHATS"));
     }
 
+    useEffect(() => {
+      window.history.pushState({ chatOpen: true }, '');
+  
+      const handlePopState = (event) => {
+        if (event.state && event.state.chatOpen) {
+          closeChatWindow();
+        }
+      };
+      window.addEventListener('popstate', handlePopState);
+  
+      return () => {
+        window.removeEventListener('popstate', handlePopState);
+      };
+    }, [closeChatWindow]);
+
 
   return (
     <div className='w-screen lg:w-full flex flex-col'>

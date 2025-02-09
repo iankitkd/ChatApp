@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import {UserTile} from './index';
-import { getUsersDetails, listenToChatList } from '../services/userService';
+import {UserTile} from '../index';
+import { getUsersDetails, listenToChatList } from '../../services/userService';
 
 const Chatlist = () => {
   const {user} = useSelector(state => state.auth);

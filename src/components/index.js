@@ -1,15 +1,15 @@
-import OpenRoute from './OpenRoute';
-import PrivateRoute from './PrivateRoute';
-import ConfirmationModal from './ConfirmationModal';
-import SideMenu from "./SideMenu";
-import BottomMenu from './BottomMenu';
-import Chatlist from './Chatlist';
-import Profile from './Profile';
-import SearchWindow from './SearchWindow';
-import UserTile from './UserTile';
+import OpenRoute from './auth/OpenRoute';
+import PrivateRoute from './auth/PrivateRoute';
+import ConfirmationModal from './layout/ConfirmationModal';
+import SideMenu from "./layout/SideMenu";
+import BottomMenu from './layout/BottomMenu';
+import UserTile from './layout/UserTile';
+import Chatlist from './sections/Chatlist';
+import Profile from './sections/Profile';
+import SearchWindow from './sections/SearchWindow';
+import Settings from './sections/Settings';
 import ChatWindow from './chatWindow/ChatWindow';
 import AIChatWindow from './chatWindow/AIChatWindow';
-import Settings from './Settings';
 
 export {
     OpenRoute, 

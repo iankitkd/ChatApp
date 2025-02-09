@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react'
+import { useSelector } from 'react-redux';
 
 import { FaArrowLeftLong } from "react-icons/fa6";
 
-import { findUsersByUsername } from '../services/userService';
-import debounce from '../utils/debounce';
-import UserTile from './UserTile';
-import { useSelector } from 'react-redux';
+import { findUsersByUsername } from '../../services/userService';
+import debounce from '../../utils/debounce';
+import {UserTile} from '../index';
 
 const SearchWindow = ({closeWindow}) => {
   const [searchQuery, setSearchQuery] = useState("");

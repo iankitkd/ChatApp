@@ -10,6 +10,13 @@ import { logoutService } from '../services/authService';
 import useSetVh from '../hooks/useSetVh';
 import { setSelectedSection, setSelectedUser } from '../slices/selectionSlice';
 
+const sectionName = {
+  "CHATS": "Chats",
+  "ASKAI": "Ask AI",
+  "PROFILE": "Profile",
+  "SETTINGS": "Settings",
+}
+
 const Dashboard = () => {
 
   const [isSearchWindowOpen, setIsSearchWindowOpen] = useState(false);
@@ -50,7 +57,7 @@ const Dashboard = () => {
 
       <div className={`${(selectedUser || currentSection ==="ASKAI") && isMobile ? "hidden" : ""} w-screen md:w-2/3 lg:w-1/3 flex flex-col shadow-lg bg-background-card relative`}>
         <div className='flex justify-between px-3 py-1 shadow-xs'>
-          <p className='text-2xl font-semibold'>{currentSection.charAt(0).toUpperCase() + currentSection.slice(1).toLowerCase()}</p>
+          <p className='text-2xl font-semibold'>{sectionName[currentSection]}</p>
           <div className='flex gap-4 text-2xl'>
             {currentSection === "CHATS" && <button className='hover:cursor-pointer' onClick={() =>setIsSearchWindowOpen(true)}><FaSearch/></button>}
             <button className='md:hidden' onClick={() => setIsMoreMenuOpen(prev => !prev)}><BsThreeDotsVertical/></button>
