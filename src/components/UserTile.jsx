@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { FaUser } from "react-icons/fa";
 
-import { setSelectedUser } from '../slices/chatSlice';
+import { setSelectedUser } from '../slices/selectionSlice';
 
 const UserTile = ({userData}) => {
   const {uid, name, username, photoURL} = userData;
 
   const dispatch = useDispatch();
-  const {selectedUser} = useSelector(state => state.chat);
+  const {selectedUser} = useSelector(state => state.selection);
 
   const handleUserSelect = () => {
     dispatch(setSelectedUser(userData));

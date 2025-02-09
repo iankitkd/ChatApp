@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { FaUserCircle } from "react-icons/fa";
+import { FaRobot, FaUserCircle } from "react-icons/fa";
 import { IoMdSettings, IoMdChatbubbles } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 
 const MenuItem = ({Icon, label, isActive, onMenuClick}) => (
-  <div className={`group relative flex items-center px-2 py-2 z-10 ${isActive? "bg-background-card": ""}`}>
+  <div className={`group relative flex items-center px-2 py-2 z-10 ${isActive? "bg-background-card border-r-1 border-border/50": ""}`}>
       <button className='hover:cursor-pointer' onClick={onMenuClick}> 
         <Icon className={isActive ? "text-button": ""} /> 
       </button>
@@ -19,16 +19,22 @@ const SideMenu = ({currentSection, setCurrentSection, setIsLogoutModalOpen}) => 
 
   return (
     <div className='hidden md:flex flex-col justify-between'>
-      <div className='flex flex-col items-center gap-3 text-xl'>
+      <div className='flex flex-col items-center pt-10 text-2xl'>
         <MenuItem 
           Icon={IoMdChatbubbles}
           label={"Chats"}
           isActive={currentSection === "CHATS"}
           onMenuClick={() => setCurrentSection("CHATS")}
         />
+        <MenuItem 
+          Icon={FaRobot}
+          label={"AskAI"}
+          isActive={currentSection === "ASKAI"}
+          onMenuClick={() => setCurrentSection("ASKAI")}
+        />
       </div>
 
-      <div className='flex flex-col items-center text-xl'>
+      <div className='flex flex-col items-center text-2xl'>
         <MenuItem 
           Icon={IoMdSettings}
           label={"Settings"}

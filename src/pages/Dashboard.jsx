@@ -5,23 +5,33 @@ import { useNavigate } from 'react-router-dom';
 import { FaSearch } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
-import { BottomMenu, Chatlist, ChatWindow, ConfirmationModal, Profile, SearchWindow, Settings, SideMenu } from '../components/'
+import { AIChatWindow, BottomMenu, Chatlist, ChatWindow, ConfirmationModal, Profile, SearchWindow, Settings, SideMenu } from '../components/'
 import { logoutService } from '../services/authService';
 import useSetVh from '../hooks/useSetVh';
+import { setSelectedSection, setSelectedUser } from '../slices/selectionSlice';
 
 const Dashboard = () => {
-  const [currentSection, setCurrentSection] = useState("CHATS");
 
   const [isSearchWindowOpen, setIsSearchWindowOpen] = useState(false);
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-  const {selectedUser} = useSelector(state => state.chat);
+  const {selectedSection:currentSection, selectedUser} = useSelector(state => state.selection);
   const {loading} = useSelector(state => state.auth)
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const setCurrentSection = (section) => {
+    dispatch(setSelectedSection(section));
+  }
+
+  useEffect(() => {
+    if(currentSection === "ASKAI") {
+      dispatch(setSelectedUser(null));
+    }
+  }, [currentSection])
+  
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -36,9 +46,9 @@ const Dashboard = () => {
     style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
     >
       <SideMenu currentSection={currentSection} setCurrentSection={setCurrentSection} setIsLogoutModalOpen={setIsLogoutModalOpen} />
-      {!selectedUser && <BottomMenu currentSection={currentSection} setCurrentSection={setCurrentSection} />}
+      {!selectedUser && (currentSection !== "ASKAI") && <BottomMenu currentSection={currentSection} setCurrentSection={setCurrentSection} />}
 
-      <div className={`${selectedUser && isMobile ? "hidden" : ""} w-screen md:w-2/3 lg:w-1/3 flex flex-col shadow-lg bg-background-card relative`}>
+      <div className={`${(selectedUser || currentSection ==="ASKAI") && isMobile ? "hidden" : ""} w-screen md:w-2/3 lg:w-1/3 flex flex-col shadow-lg bg-background-card relative`}>
         <div className='flex justify-between px-3 py-1 shadow-xs'>
           <p className='text-2xl font-semibold'>{currentSection.charAt(0).toUpperCase() + currentSection.slice(1).toLowerCase()}</p>
           <div className='flex gap-4 text-2xl'>
@@ -69,10 +79,14 @@ const Dashboard = () => {
 
       {selectedUser ? (
         <ChatWindow />
-      ) : (
+      ) : currentSection !== "ASKAI" && (
         <div className='w-full hidden md:flex justify-center items-center'>
           <p className="text-text-secondary">Select a chat to start messaging</p>
         </div>
+      )}
+
+      { currentSection === "ASKAI" && (
+        <AIChatWindow />
       )}
 
       {

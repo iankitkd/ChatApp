@@ -23,7 +23,7 @@ const Chatlist = () => {
     if(!user) return;
 
     const cachedChatList = localStorage.getItem("chatList");
-    if (cachedChatList) {
+    if (cachedChatList?.length > 0) {
       setUserChatHistory(JSON.parse(cachedChatList));
     }
 

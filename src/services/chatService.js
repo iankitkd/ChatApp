@@ -63,9 +63,9 @@ export const sendMessage = async (chatId, userId, messageText) => {
     }
 } 
 
-export const listenToMessages = (chatId, setChatMessages) => {
+export const listenToMessagesAll = (collectionName, docId, setChatMessages) => {
   try {
-    const messagesRef = collection(db, "chats", chatId, "messages");
+    const messagesRef = collection(db, collectionName, docId, "messages");
 
     const q = query(messagesRef, orderBy("timestamp", "asc"));
 
@@ -93,3 +93,34 @@ export const listenToMessages = (chatId, setChatMessages) => {
     return null;
   }
 };
+
+
+export const sendMessageAI = async (userId, senderId, messageText) => {
+  try {
+    const messagesAIRef = collection(db, "ai_chats", userId, "messages");
+    await addDoc(messagesAIRef, {
+        senderId: senderId,
+        messageText: messageText,
+        timestamp: serverTimestamp()
+    });
+  } catch (error) {
+    console.log("Error sending message", error);
+  }
+}
+
+export const listenToMessages = (chatId, setChatMessages) => {
+  try {
+    listenToMessagesAll("chats", chatId, setChatMessages);
+  } catch (error) {
+    console.error("Error fetching messages", error);
+    return null;
+  }
+}
+export const listenToMessagesAI = (userId, setChatMessages) => {
+  try {
+    listenToMessagesAll("ai_chats", userId, setChatMessages);
+  } catch (error) {
+    console.error("Error fetching messages", error);
+    return null;
+  }
+}

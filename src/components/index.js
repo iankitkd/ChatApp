@@ -7,7 +7,8 @@ import Chatlist from './Chatlist';
 import Profile from './Profile';
 import SearchWindow from './SearchWindow';
 import UserTile from './UserTile';
-import ChatWindow from './ChatWindow';
+import ChatWindow from './chatWindow/ChatWindow';
+import AIChatWindow from './chatWindow/AIChatWindow';
 import Settings from './Settings';
 
 export {
@@ -21,5 +22,6 @@ export {
     SearchWindow,
     UserTile,
     ChatWindow,
+    AIChatWindow,
     Settings,
 }

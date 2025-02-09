@@ -56,6 +56,7 @@ export const logoutService = (navigate) => async (dispatch) => {
     await signOut(auth);
     dispatch(setUser(null));
     localStorage.removeItem("user");
+    localStorage.removeItem("chatList");
     toast.success("Sign out successfully!");
     navigate("/login");
   } catch (error) {
