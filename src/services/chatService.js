@@ -32,12 +32,14 @@ export const createNewChat = (user1Id, user2Id) => async (dispatch) => {
     }
 };
 
-export const sendMessage = async (chatId, userId, messageText) => {
+export const sendMessage = async (chatId, userId, messageText, mediaUrl, fileName) => {
     try {
         const messagesRef = collection(db, "chats", chatId, "messages");
         await addDoc(messagesRef, {
             senderId: userId,
             messageText: messageText,
+            media: mediaUrl || null,
+            fileName: fileName || null,
             timestamp: serverTimestamp()
         });
 
