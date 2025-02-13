@@ -1,15 +1,61 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { FaUser } from 'react-icons/fa';
+import { FaUser, FaUserCircle } from 'react-icons/fa';
 import { IoMdMail } from 'react-icons/io';
+import { MdOutlineCameraAlt } from "react-icons/md";
+import toast from 'react-hot-toast';
+
+import { uploadToCloudinary } from "../../services/mediaService"
+import { updateUser } from '../../services/userService';
+import { setUser } from '../../slices/authSlice';
 
 const Profile = () => {
+    const dispatch = useDispatch();
     const {user} = useSelector(state => state.auth);
-    const {email, name, username, photoURL} = user;
+    const {uid, email, name, username, photoURL} = user;
+
+    const handleFileChange = async (e) => {
+        const selectedFile = e.target.files[0];
+        if (!selectedFile) return;
+
+        if (!selectedFile.type.startsWith("image/")) {
+            toast.error("Invalid file type")
+            return;
+        }
+
+        const toastId = toast.loading("Updating...");
+
+        const mediaUrl = await uploadToCloudinary(selectedFile);
+        await updateUser(uid, {photoURL: mediaUrl});
+        dispatch(setUser({...user, photoURL: mediaUrl}));
+
+        toast.dismiss(toastId);
+        toast.success("Successfully Updated!");
+    };
 
   return (
-    <div className='w-full h-full flex flex-col gap-2 px-2 py-2 text-xl'>
+    <div className='w-full h-full flex flex-col gap-2 px-4 py-2 text-xl'>
+        <div className='py-2 flex justify-center'>
+            <div className='relative w-32 h-32 rounded-full shadow-xl'>
+                { photoURL ? (
+                    <img 
+                    src={photoURL} 
+                    alt="Profile Photo" 
+                    className='w-full h-full rounded-full object-cover'
+                    loading='lazy'
+                    />
+                    ) : (
+                        <FaUserCircle className='w-full h-full'/>
+                    )
+                }
+                <label className="absolute bottom-1 right-1 p-2 rounded-full bg-background-fill cursor-pointer">
+                    <MdOutlineCameraAlt />
+                    <input type="file" className="hidden" onChange={handleFileChange} />
+                </label>
+            </div>
+        </div>
+
         <div className='flex items-center gap-3 py-2'>
             <div>
                 <FaUser />

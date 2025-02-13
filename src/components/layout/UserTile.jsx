@@ -23,9 +23,10 @@ const UserTile = ({userData}) => {
         {
           photoURL ? (
             <img
-            className="w-full h-full object-cover"
+            className="w-full h-full rounded-full object-cover"
             src={photoURL}
             alt="User Image"
+            loading='lazy'
             />
           ) : (
             <FaUser className='w-full h-full p-2' />

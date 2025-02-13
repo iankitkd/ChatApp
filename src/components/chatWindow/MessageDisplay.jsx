@@ -10,10 +10,12 @@ const MessageDisplay = ({messages, loading}) => {
 
     const messagesEndRef = useRef(null);
     useEffect(() => {
-      if (messagesEndRef.current) {
-        messagesEndRef.current.scrollIntoView();
-      }
+      messagesEndRef.current?.scrollIntoView();
     }, [messages]);
+
+    const handleMediaLoad = () => {
+      messagesEndRef.current?.scrollIntoView();
+    };
 
 
     let previousDate = null;
@@ -34,11 +36,11 @@ const MessageDisplay = ({messages, loading}) => {
       const fileType = getFileType(fileName);
 
       if(fileType === "image") { 
-        return (<img src={media} alt="Media" style={{ width: 200 }} />
+        return (<img src={media} alt="Media" className="rounded-lg" style={{ width: 200 }} onLoad={handleMediaLoad} loading='lazy' />
       )}
       if(fileType === "video") {
         return (
-          <video controls style={{ width: 200 }}>
+          <video controls className="rounded-lg" style={{ width: 200 }} onLoad={handleMediaLoad} >
             <source src={media} />
             Your browser does not support the video tag.
           </video>
@@ -49,7 +51,7 @@ const MessageDisplay = ({messages, loading}) => {
           <FiFileText className="text-xl" />
           <span className="text-sm">{fileName}</span>
           <a href={media} download target="_blank" rel="noopener noreferrer">
-            <IoMdDownload className='text-text-primary/70' />
+            <IoMdDownload className='text-text-primary/80' />
           </a>
         </div>
       )
@@ -68,14 +70,14 @@ const MessageDisplay = ({messages, loading}) => {
                 <div className='self-center px-3 py-1 bg-background-fill rounded-full'>{displayDate}</div>
             )}
 
-            <div className={`max-w-full w-fit px-2 py-1 my-2 rounded-xl break-words whitespace-pre-wrap flex flex-col shadow-lg 
+            <div className={`max-w-full w-fit px-1 py-1 my-2 rounded-xl break-words whitespace-pre-wrap flex flex-col shadow-lg 
                 ${msg.senderId == user.uid ? "self-end bg-background-chat-right text-button-text rounded-tr-none" : "bg-background-chat-left rounded-tl-none"}`}
             >
                 {msg.media && mediaDisplay(msg.media, msg.fileName)}
-                <div className=''>
+                <div className='px-1 break-words whitespace-pre-wrap overflow-x-auto'>
                     <ReactMarkdown>{msg.messageText}</ReactMarkdown>
                 </div>
-                <span className='self-end text-[9px] leading-0 pt-2 pb-1'>
+                <span className='self-end text-[9px] leading-0 pt-2 pb-1 px-1'>
                     {msg.time}
                 </span>
             </div>

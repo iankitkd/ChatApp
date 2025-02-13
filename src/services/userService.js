@@ -1,5 +1,5 @@
 import { db } from "../config/firebase"; 
-import { doc, setDoc, getDoc, serverTimestamp, query, where, getDocs, collection, orderBy, onSnapshot } from "firebase/firestore";
+import { doc, setDoc, getDoc, serverTimestamp, query, where, getDocs, collection, orderBy, onSnapshot, updateDoc } from "firebase/firestore";
 
 export const createUser = async (userId, email, name, username, photoURL) => {
     try {  
@@ -32,6 +32,16 @@ export const getUser = async (userId) => {
         return userSnap.data();
     } catch (error) {
         console.log("Error getting user", error);
+        return null;
+    }
+}
+
+export const updateUser = async (userId, data) => {
+    try {
+        const userRef = doc(db, "users", userId);
+        await updateDoc(userRef, data);
+    } catch (error) {
+        console.log("Error updating user", error);
         return null;
     }
 }

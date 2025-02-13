@@ -89,7 +89,7 @@ const AIChatWindow = () => {
 
 
   return (
-    <div className='w-screen lg:w-full flex flex-col'>
+    <div className='w-screen md:w-2/3 lg:w-3/4 flex flex-col'>
       <ReceiverDetails selectedUser={selectedUser} closeChatWindow={closeChatWindow} />
 
       <MessageDisplay messages={messages} loading={loading} />

@@ -34,7 +34,6 @@ try {
       `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${mediaType}/upload`,
       formData
     );
-    console.log("res", response.data);
     return response.data.secure_url;
   } catch (error) {
     console.error("Upload failed:", error);

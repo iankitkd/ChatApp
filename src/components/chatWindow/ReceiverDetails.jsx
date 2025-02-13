@@ -4,9 +4,9 @@ import { FaArrowLeftLong } from 'react-icons/fa6'
 
 const ReceiverDetails = ({selectedUser, closeChatWindow}) => {
   return (
-    <div className='bg-background-card flex items-center p-1 border-border/50 border-l-1'>
+    <div className='bg-background-card flex items-center px-1 border-border/50 border-l-1'>
         { 
-          <button className='hover:cursor-pointer hover:-translate-x-1 transform transition duration-300 px-3 text-xl h-full' 
+          <button className='hover:cursor-pointer hover:-translate-x-1 transform transition duration-300 px-4 text-xl h-full' 
           onClick={closeChatWindow}
           >
             <FaArrowLeftLong />
@@ -16,9 +16,10 @@ const ReceiverDetails = ({selectedUser, closeChatWindow}) => {
           {
             selectedUser.photoURL ? (
               <img
-              className="w-full h-full object-cover"
+              className="w-full h-full rounded-full object-cover"
               src={selectedUser.photoURL}
               alt="User Image"
+              loading='lazy'
               />
             ) : selectedUser.uid === "ai" ? (
               <FaRobot className='w-full h-full p-2' />

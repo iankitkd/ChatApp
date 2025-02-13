@@ -19,7 +19,7 @@ const SideMenu = ({currentSection, setCurrentSection, setIsLogoutModalOpen}) => 
 
   return (
     <div className='hidden md:flex flex-col justify-between'>
-      <div className='flex flex-col items-center pt-10 text-2xl'>
+      <div className='flex flex-col items-center pt-12 text-2xl'>
         <MenuItem 
           Icon={IoMdChatbubbles}
           label={"Chats"}

@@ -55,8 +55,8 @@ const Dashboard = () => {
       <SideMenu currentSection={currentSection} setCurrentSection={setCurrentSection} setIsLogoutModalOpen={setIsLogoutModalOpen} />
       {!selectedUser && (currentSection !== "ASKAI") && <BottomMenu currentSection={currentSection} setCurrentSection={setCurrentSection} />}
 
-      <div className={`${(selectedUser || currentSection ==="ASKAI") && isMobile ? "hidden" : ""} w-screen md:w-2/3 lg:w-1/3 flex flex-col shadow-lg bg-background-card relative`}>
-        <div className='flex justify-between px-3 py-1 shadow-xs'>
+      <div className={`${(selectedUser || currentSection ==="ASKAI") && isMobile ? "hidden" : ""} w-screen md:w-1/3 lg:w-1/4 flex flex-col shadow-lg bg-background-card relative`}>
+        <div className='flex justify-between px-3 py-2 shadow-xs'>
           <p className='text-2xl font-semibold'>{sectionName[currentSection]}</p>
           <div className='flex gap-4 text-2xl'>
             {currentSection === "CHATS" && <button className='hover:cursor-pointer' onClick={() =>setIsSearchWindowOpen(true)}><FaSearch/></button>}
@@ -87,7 +87,7 @@ const Dashboard = () => {
       {selectedUser ? (
         <ChatWindow />
       ) : currentSection !== "ASKAI" && (
-        <div className='w-full hidden md:flex justify-center items-center'>
+        <div className='md:w-2/3 lg:w-3/4 hidden md:flex justify-center items-center'>
           <p className="text-text-secondary">Select a chat to start messaging</p>
         </div>
       )}
